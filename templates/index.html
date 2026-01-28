@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinépolis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2B5797;
+            padding: 20px;
+        }
+
+        .contenedor {
+            background-color: white;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1 class="text-center mb-4">CINÉPOLIS</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Entradas</h3>
+
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" name="nombre" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad de Boletas</label>
+                        <input type="number" name="cantidad" class="form-control">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="tarjeta_cineco" class="form-check-input" id="tarjeta">
+                        <label class="form-check-label" for="tarjeta">Tarjeta CINECO</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Procesar</button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Salidas</h3>
+
+                {% if resultado %}
+                <div>
+                    <p><strong>Valor a Pagar:</strong></p>
+                    <p>Cliente: {{ resultado.nombre }}</p>
+                    <p>Cantidad: {{ resultado.cantidad }}</p>
+                    <p>Precio por boleta: ${{ "{:,}".format(resultado.precio_boleta) }}</p>
+                    <p>Subtotal: ${{ "{:,}".format(resultado.subtotal|int) }}</p>
+
+                    {% if resultado.descuento_cantidad > 0 %}
+                    <p>Descuento cantidad ({{ resultado.descuento_cantidad|int }}%): -${{
+                        "{:,}".format(resultado.monto_descuento|int) }}</p>
+                    {% endif %}
+
+                    {% if resultado.tiene_tarjeta %}
+                    <p>Descuento CINECO (10%): -${{ "{:,}".format(resultado.descuento_cineco|int) }}</p>
+                    {% endif %}
+
+                    <p class="fs-4"><strong>TOTAL: ${{ "{:,}".format(resultado.total|int) }}</strong></p>
+                </div>
+                {% else %}
+                <p class="text-muted">Completa el formulario para ver el total</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

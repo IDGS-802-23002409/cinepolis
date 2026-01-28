@@ -1,0 +1,16 @@
+# Dependencias del Proyecto Cinépolis
+# =====================================
+# 
+# Este archivo lista todas las bibliotecas de Python que necesita
+# la aplicación para funcionar.
+#
+# Para instalar todas las dependencias, ejecuta:
+#     pip install -r requirements.txt
+
+# Flask: Framework web principal
+# Versión 3.0.0 o superior
+Flask>=3.0.0
+
+# Werkzeug: Utilidades WSGI (incluido con Flask)
+# Flask lo usa internamente para manejar requests
+Werkzeug>=3.0.0

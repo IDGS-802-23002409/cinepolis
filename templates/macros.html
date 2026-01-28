@@ -1,0 +1,63 @@
+
+
+{% macro input_field(name, label, type='text', required=False, placeholder='', value='') %}
+<div class="form-group">
+    {# 
+    La etiqueta (label) muestra el nombre del campo.
+    El atributo 'for' conecta la etiqueta con el input usando el 'id'.
+    #}
+    <label for="{{ name }}">{{ label }}</label>
+    
+    {# 
+    El input es donde el usuario ingresa los datos.
+    - id: Identificador único para conectar con el label
+    - name: Nombre que se usa para enviar el dato al servidor
+    - type: Tipo de input (text, number, etc.)
+    - class: Clase CSS para aplicar estilos
+    - placeholder: Texto de ayuda que aparece cuando el campo está vacío
+    - value: Valor inicial (si existe)
+    - required: Si está presente, el navegador valida que no esté vacío
+    #}
+    <input 
+        type="{{ type }}" 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control"
+        {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if required %}required{% endif %}
+    >
+</div>
+{% endmacro %}
+
+
+{# 
+================================================================================
+MACRO: checkbox_field
+================================================================================
+Este macro genera un campo de tipo checkbox (casilla de verificación).
+
+Parámetros:
+    - name: El atributo 'name' del checkbox
+    - label: El texto que se muestra junto al checkbox
+    - checked: Si el checkbox debe estar marcado por defecto (True/False)
+
+Ejemplo de uso:
+    {{ checkbox_field('tarjeta_cineco', '¿Tienes tarjeta CINECO?') }}
+#}
+
+{% macro checkbox_field(name, label, checked=False) %}
+<div class="form-group checkbox-group">
+    {# 
+    Para los checkboxes, el input va antes del label.
+    Esto es una convención común en diseño de formularios.
+    #}
+    <input 
+        type="checkbox" 
+        id="{{ name }}" 
+        name="{{ name }}"
+        {% if checked %}checked{% endif %}
+    >
+    <label for="{{ name }}">{{ label }}</label>
+</div>
+{% endmacro %}

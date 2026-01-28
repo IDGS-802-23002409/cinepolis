@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+{#
+================================================================================
+LAYOUT.HTML - Plantilla Base con Herencia
+================================================================================
+
+¿Qué es la herencia de plantillas?
+-----------------------------------
+La herencia de plantillas es como tener una "plantilla maestra" que define
+la estructura común de todas las páginas (header, footer, estilos, etc.).
+
+Otras plantillas pueden "heredar" de esta plantilla base y solo cambiar
+las partes específicas que necesitan.
+
+Ventajas:
+- No repetimos el HTML común (head, header, footer, etc.)
+- Si cambiamos algo en el layout, se aplica a todas las páginas
+- El código es más organizado y mantenible
+
+Sintaxis:
+{% block nombre_del_bloque %}
+... contenido por defecto ...
+{% endblock %}
+
+Las plantillas hijas pueden reemplazar estos bloques con su propio contenido.
+#}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {#
+    El bloque 'title' permite que cada página defina su propio título.
+    Si no se define, usa "Cinépolis" por defecto.
+    #}
+    <title>{% block title %}Cinépolis{% endblock %} - La Capital del Cine</title>
+
+    {#
+    ========================================================================
+    ESTILOS CSS EMBEBIDOS
+    ========================================================================
+    Aquí definimos todos los estilos de la aplicación.
+    Usamos el color azul característico de Cinépolis (#2B5797).
+    #}
+    <style>
+        /* ================================================================
+           ESTILOS GLOBALES
+           ================================================================ */
+
+        /* Reset básico y configuración del body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2B5797 50%, #3a6db5 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ================================================================
+           HEADER (ENCABEZADO)
+           ================================================================ */
+
+        .header {
+            background-color: #2B5797;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* ================================================================
+           CONTENEDOR PRINCIPAL
+           ================================================================ */
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* ================================================================
+           MENSAJES FLASH (Notificaciones)
+           ================================================================ */
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* Mensaje de éxito (verde) */
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Mensaje de error (rojo) */
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* ================================================================
+           FORMULARIOS
+           ================================================================ */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2B5797;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2B5797;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 5px rgba(43, 87, 151, 0.3);
+        }
+
+        /* Grupo de checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* ================================================================
+           BOTONES
+           ================================================================ */
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #2B5797;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e3c72;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* ================================================================
+           RESULTADOS
+           ================================================================ */
+
+        .resultado {
+            background-color: #f8f9fa;
+            border: 2px solid #2B5797;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .resultado h2 {
+            color: #2B5797;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .detalle-compra {
+            margin-bottom: 15px;
+        }
+
+        .detalle-compra p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+
+        .detalle-compra strong {
+            color: #2B5797;
+        }
+
+        .total-final {
+            background-color: #2B5797;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        /* ================================================================
+           FOOTER
+           ================================================================ */
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        /* ================================================================
+           RESPONSIVE (Adaptación a móviles)
+           ================================================================ */
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {#
+    ========================================================================
+    HEADER (Encabezado de la página)
+    ========================================================================
+    Este header aparece en todas las páginas que heredan de este layout.
+    #}
+    <div class="header">
+        <h1>🎬 CINÉPOLIS</h1>
+        <p>La Capital del Cine</p>
+    </div>
+
+    {#
+    ========================================================================
+    CONTENEDOR PRINCIPAL
+    ========================================================================
+    Aquí va el contenido específico de cada página.
+    #}
+    <div class="container">
+        {#
+        Mostrar mensajes flash (notificaciones)
+        Los mensajes flash se crean con flash() en Python.
+        get_flashed_messages() obtiene todos los mensajes pendientes.
+        with_categories=True nos da también la categoría (success, error, etc.)
+        #}
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {#
+        BLOQUE DE CONTENIDO
+        Este es el bloque que las plantillas hijas reemplazarán con su
+        contenido específico.
+        #}
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {#
+    ========================================================================
+    FOOTER (Pie de página)
+    ========================================================================
+    #}
+    <div class="footer">
+        <p>&copy; 2024 Cinépolis - Todos los derechos reservados</p>
+    </div>
+</body>
+
+</html>
